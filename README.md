@@ -1,6 +1,6 @@
 # Rey de Copas — More than a Hack 2027
 
-Team **Rey de Copas** (Mateo Toniolo, Gabriel Canavesio, Santiago).
+Team **Rey de Copas** (Mateo Toniolo, Gabriel Canavesio, Santiago Vidoz).
 
 This repository labels every frame of the competition match as home possession, away possession, or dead ball. A gradient-boosted tree, trained on public DFL tracking that has been degraded to resemble the competition feed, is adapted to the match by expectation-maximisation on the match's own unlabelled tracking. A duration-aware decoder then turns that evidence into whole possessions, and a second stage trained on DFL can hand a segment it judges wrong to its neighbour.
 
