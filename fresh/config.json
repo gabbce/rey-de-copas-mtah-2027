@@ -1,0 +1,19 @@
+{
+ "feature_set": "setp",
+ "duration_decoder": true,
+ "segment_corrector": true,
+ "classifier": "gbm",
+ "context_change_cost": false,
+ "handover_evidence": false,
+ "merge_seconds": 2.0,
+ "decoder_rank": "merged",
+ "duration_merge_seconds": null,
+ "degradation": 1,
+ "corrector_merge_seconds": null,
+ "corrector_min_threshold": 0.5,
+ "test_degradation": null,
+ "metrica_training": false,
+ "velocity_smooth_frames": 0,
+ "duration_length_scale": 1.0,
+ "decoder_search_seed": 0
+}

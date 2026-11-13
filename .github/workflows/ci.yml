@@ -1,0 +1,20 @@
+name: ci
+
+# Runs on Linux what we develop on macOS: lint, the tests, and above all fresh/tests/test_hash.py,
+# which decodes synthetic evidence and fails if the output CSV's SHA-256 depends on the machine.
+# No match data is involved anywhere (tests needing data/ or external/ skip themselves).
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked --extra validation
+      - run: uv run ruff check .
+      - run: uv run pytest -q

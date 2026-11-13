@@ -1,0 +1,32 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Match data: licensed for the competition only, never committed
+data/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+
+# Local outputs: submissions, logs, caches and searches of fresh/ (fresh/artifacts/ is tracked)
+fresh/out/
+data_fake/
+
+# Hand labels: an extract of the match, never committed
+labels/
+
+# Public third-party data (Metrica sample games): downloaded locally, never committed
+external/
+
+# Claude Code: the shared settings are committed, personal and runtime files are not
+.claude/settings.local.json
+.claude/worktrees/
+.claude/scheduled_tasks.lock

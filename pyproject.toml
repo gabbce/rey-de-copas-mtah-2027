@@ -1,0 +1,44 @@
+[project]
+name = "possession"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "mateotoniolo", email = "mateojustotoniolo@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "av>=18.1.0",
+    "kloppy>=3.18",
+    "numpy>=2.4.6",
+    "pandas>=3.0.6",
+    "pillow>=12.3.0",
+    "scikit-learn==1.7.2",
+]
+
+[project.optional-dependencies]
+validation = [
+    "numba==0.68.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.17.1",
+]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+include = ["src", "tests", "fresh"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["vendor"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "fresh/tests"]
