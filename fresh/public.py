@@ -100,8 +100,14 @@ def degrade(tracking, runs, seed, hide=True, truth=None, version=None):
     """Version 1: blur, then state-free gaps. Version 2 (config.DEGRADE): the frozen stoppage ball
     replaced by a moving one, blur, then state-dependent gaps whose rates come from gap_targets.
     Version 4: version 1's shape with the fixed V4 constants."""
+    import os
+
     import config
-    version = config.DEGRADE if version is None else version
+    forced = os.environ.get("FRESH_TRAIN_DEGRADE")
+    if version is None and forced:
+        version = int(forced)
+    else:
+        version = config.DEGRADE if version is None else version
     rng = np.random.default_rng(seed)
     if version in (1, 3, 4):
         if version == 4:

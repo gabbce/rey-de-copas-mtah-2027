@@ -104,17 +104,19 @@ def fit(variant=FINAL, log=print):
     base, seeds, voting = parse(variant)
     if base != "A":
         return _fit(base, seeds, voting, variant, log)
-    import public
-    previous = os.environ.get("FRESH_DEGRADE")
-    os.environ["FRESH_DEGRADE"] = "4"
+    import data_io
+    previous = os.environ.get("FRESH_TRAIN_DEGRADE")
+    previous_cache = data_io.PUBLIC_CACHE
+    os.environ["FRESH_TRAIN_DEGRADE"] = "4"
+    data_io.PUBLIC_CACHE = data_io.OUT / "cache-v4"
     try:
-        with public.degradation(4):
-            return _fit(base, seeds, voting, variant, log)
+        return _fit(base, seeds, voting, variant, log)
     finally:
+        data_io.PUBLIC_CACHE = previous_cache
         if previous is None:
-            os.environ.pop("FRESH_DEGRADE", None)
+            os.environ.pop("FRESH_TRAIN_DEGRADE", None)
         else:
-            os.environ["FRESH_DEGRADE"] = previous
+            os.environ["FRESH_TRAIN_DEGRADE"] = previous
 
 
 def _fit(base, seeds, voting, variant, log):
