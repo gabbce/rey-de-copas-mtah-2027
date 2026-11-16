@@ -30,8 +30,8 @@ class DecodeParams:
     team_switch: float = 12.0  # nats to hand the ball straight to the other team
     to_dead: float = 8.0  # nats to call a stoppage
     from_dead: float = 8.0  # nats to restart play
-    # Minimum lengths in frames. The public window's shortest possession is 19 frames and its
-    # shortest stoppage 138, so these defaults stay well inside what really happens.
+    # Minimum lengths in frames. These defaults are only a starting point; the submitted
+    # decoder stores its own lengths, chosen on external matches.
     min_possession: int = 10
     min_dead: int = 50
     shift: int = 0  # frames every decoded change is moved later (earlier if negative)

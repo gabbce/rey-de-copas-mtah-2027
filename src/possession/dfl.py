@@ -85,9 +85,9 @@ def load_dfl_match(match_id, root=DFL_DIR):
 
 def merge_short(truth, seconds, fps=25):
     """DFL's truth with every H/A spell shorter than `seconds` given to the team of the live spell
-    right before it (or, after a stoppage, right after it), so its rate of possessions matches the
-    competition's: DFL changes possession about twice as often per live minute (docs/history.md
-    §31), and 3 s brings it to the public window's rate. Written for fresh/ (fresh/public.py)."""
+    right before it (or, after a stoppage, right after it). DFL's own flag changes possession
+    more often than a controlled-possession definition, so short spells stay with the previous
+    team. `seconds` is chosen on DFL. Written for fresh/ (fresh/public.py)."""
     out = truth.copy()
     limit = seconds * fps
     for a, b in valid_runs(truth):

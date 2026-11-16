@@ -1,4 +1,4 @@
-"""Which DFL degradation makes inputs most like the match's? Label-free (docs/r2-rule.md E2-inputs).
+"""Which DFL degradation makes inputs most like the match's? Label-free.
 
     uv run python fresh/run_inputs.py
 """

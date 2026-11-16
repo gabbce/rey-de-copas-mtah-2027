@@ -1,4 +1,4 @@
-"""E9 report (docs/r2-rule.md), deciding nothing: do the set-piece readings mean the same on the
+"""Report only, deciding nothing: do the set-piece readings mean the same on the
 match as on DFL? Prints per-column means only, on the match's graded frames and on each DFL
 match's live and dead frames, so a reading the match's tracker never produces (players beyond
 the lines, say) shows as a column near zero on the match. Aggregates only.

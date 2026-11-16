@@ -1,4 +1,4 @@
-"""E6 (docs/r2-rule.md): a second-stage evidence model stacked on the held-out evidence.
+"""A second-stage evidence model stacked on the held-out evidence.
 
 For every DFL match m, a gbm reads the first stage's held-out log-posteriors of the other six
 matches at offsets of up to +-4 s and their means over +-1 s and +-5 s, and re-estimates each

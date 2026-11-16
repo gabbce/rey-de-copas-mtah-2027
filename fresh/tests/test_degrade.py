@@ -1,4 +1,4 @@
-"""Degradation v2 (docs/r2-rule.md E2) on a synthetic match: no frozen stoppage ball, ends pinned,
+"""Degradation v2 on a synthetic match: no frozen stoppage ball, ends pinned,
 state-dependent gaps."""
 
 import sys

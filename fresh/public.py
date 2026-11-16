@@ -11,7 +11,7 @@ Degradation, calibrated only on label-free aggregates of the match (fresh/stats.
 
 `merge_short` smooths DFL's possession flag: a spell shorter than T stays with the team that had
 the ball before it ("possession stays with the last team that had it", CHALLENGE.md). T is
-chosen on DFL alone, by the rule in docs/merge-threshold.md (config.json merge_seconds).
+chosen on DFL alone (`config.json` merge_seconds).
 """
 
 import data_io
@@ -27,7 +27,7 @@ HIDE_SHARE = 0.41
 GAP_MEDIAN = 10.7  # seconds
 GAP_SIGMA = 0.85  # log-normal sigma: median 10.7 s puts the 90th percentile near 32 s
 MIN_GAP = 1.0  # seconds
-# version 3 (docs/r2-rule.md E8): blur window (frames) and jitter (m) from run_inputs.py --fit
+# version 3: blur window (frames) and jitter (m), an alternate of version 1 not used by default
 V3_BLUR_JITTER = (21, 0.05)
 
 
@@ -87,9 +87,8 @@ def test_suffix():
 
 
 def degrade(tracking, runs, seed, hide=True, truth=None, version=None):
-    """Version 1: blur, then state-free gaps. Version 2 (config.DEGRADE, docs/r2-rule.md E2): the
-    frozen stoppage ball replaced by a moving one, blur, then state-dependent gaps whose rates come
-    from the match's EM posteriors (gap_targets)."""
+    """Version 1: blur, then state-free gaps. Version 2 (config.DEGRADE): the frozen stoppage ball
+    replaced by a moving one, blur, then state-dependent gaps whose rates come from gap_targets."""
     import config
     version = config.DEGRADE if version is None else version
     rng = np.random.default_rng(seed)
