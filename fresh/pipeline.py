@@ -19,6 +19,7 @@ from the repository byte for byte (the Viterbi runs on integer scores; the vote 
 """
 
 import json
+import os
 
 import adapt
 import bench
@@ -99,7 +100,24 @@ def _evidence(loglik, c, channels, tables):
 
 
 def fit(variant=FINAL, log=print):
+    """Fit `variant`. Variant A trains on DFL under degradation 4 and does not adapt to the match."""
     base, seeds, voting = parse(variant)
+    if base != "A":
+        return _fit(base, seeds, voting, variant, log)
+    import public
+    previous = os.environ.get("FRESH_DEGRADE")
+    os.environ["FRESH_DEGRADE"] = "4"
+    try:
+        with public.degradation(4):
+            return _fit(base, seeds, voting, variant, log)
+    finally:
+        if previous is None:
+            os.environ.pop("FRESH_DEGRADE", None)
+        else:
+            os.environ["FRESH_DEGRADE"] = previous
+
+
+def _fit(base, seeds, voting, variant, log):
     candidates = ranked(bench.evidence_tag(SET, seeds), MERGE, seed=config.DECODER_SEED)
     em_decoder = median_params(candidates[:TOP])
     members = candidates[:TOP] if voting else [em_decoder]

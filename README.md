@@ -6,6 +6,8 @@ This repository labels every frame of the competition match as home possession, 
 
 The default artifact applies expectation-maximisation tables that were fit on BAR-ATH's unlabelled tracking and homography. That fit does not use ground truth, the public window, hand labels, or video.
 
+`uv run python fresh/predict.py --variant A` is the conservative alternative. It does not fit any parameter on the provided match. Its tree is trained on the seven DFL matches after a fixed degradation (version 4): 25-frame smoothing, 5 cm jitter, the ball hidden on half of frames, and log-normal gaps with an 8 s median. Those constants are round values for 25 Hz optical tracking, not estimates from this match. The command writes `fresh/out/fresh-A-setp-dur-cor-gbm.csv`. Add `--refit` to learn that file again from the DFL matches and the tracked decoder search.
+
 The match data is not in this repository. It is never sent to a hosted AI service.
 
 Our code is MIT, copyright 2026 Rey de Copas (see `LICENSE`). The DFL tracking used for training is not included. It is CC BY 4.0 and stays under its own terms: credit the Deutsche Fußball Liga (DFL) and cite Bassek et al. 2025.
@@ -40,6 +42,7 @@ Check the CSV with the pinned official validator:
 
 ```bash
 python vendor/mtah-2027/evaluation/validate_submission.py fresh/out/fresh-B-setp-dur-cor-gbm.csv
+python vendor/mtah-2027/evaluation/validate_submission.py fresh/out/fresh-A-setp-dur-cor-gbm.csv
 ```
 
 ## Compliance

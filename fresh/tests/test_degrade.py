@@ -23,6 +23,20 @@ def _match():
     return ball, truth, [(0, len(truth))]
 
 
+def test_version_4_uses_fixed_constants_and_no_truth():
+    rng = np.random.default_rng(0)
+    ball = np.cumsum(rng.normal(0, 0.2, (400, 2)), axis=0).astype(np.float32)
+    players = np.zeros((400, 2, 2), np.float32)
+    team = np.array([0, 1], dtype=np.int8)
+    tracking = public.Tracking(ball, players, team)
+    out = public.degrade(tracking, [(0, 400)], seed=3, version=4)
+    assert out.ball.shape == ball.shape
+    assert public.V4_BLUR == 25 and public.V4_HIDE_SHARE == 0.5
+    same = public.degrade(tracking, [(0, 400)], seed=3, version=1)
+    default = public.degrade(tracking, [(0, 400)], seed=3)
+    np.testing.assert_array_equal(default.ball, same.ball)
+
+
 def test_unfreeze_moves_the_stoppage_ball():
     ball, truth, runs = _match()
     out = public.unfreeze(ball, truth, runs, np.random.default_rng(0))
