@@ -46,7 +46,7 @@ python vendor/mtah-2027/evaluation/validate_submission.py fresh/out/fresh-A-setp
 
 ## Compliance
 
-No hand labels were used. The public five-minute window and the match video were not used for training, tuning, or selection. Variant A does not run expectation-maximisation on the provided match. The decoder it loads was searched on DFL under the version-1 degradation described above.
+The submitted pipeline uses no hand labels or other human-produced labels of the provided match. The public five-minute window and the match video were not used for training, tuning, or selection. Variant A does not run expectation-maximisation on the provided match. The decoder it loads was searched on DFL under the version-1 degradation described above.
 
 ## Layout
 
