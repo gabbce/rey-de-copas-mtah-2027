@@ -4,7 +4,7 @@ The same function runs on the match, on DFL and on Metrica's sample games, so a 
 public data reads the same columns on the match. Everything is NaN-aware: a measurement that cannot
 be taken on a frame is filled with a neutral value and, where it matters, flagged.
 
-Nothing here was chosen by looking at our hand labels: every column is a plain physical reading
+Nothing here was chosen by looking at labels of the provided match: every column is a plain physical reading
 (distances, speeds, the block's movement, the ball's gaps), and which ones help is judged on public
 data only (fresh/README.md).
 """
