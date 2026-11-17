@@ -1,12 +1,13 @@
 """Write the fresh pipeline's full-match submission and check it. Aggregates only.
 
-    uv run python fresh/predict.py                 # variant B from fresh/model-B.json
-    uv run python fresh/predict.py --refit         # learn it again first (label-free)
-    uv run python fresh/predict.py --variant A --out /tmp/a.csv
+    uv run python fresh/predict.py                 # variant A, the submission
+    uv run python fresh/predict.py --refit         # learn that artifact again
+    uv run python fresh/predict.py --variant B     # EM alternative, not submitted
 
-The CSV goes to fresh/out/ by default, which a local .gitignore keeps untracked. Prints the official
-validator's verdict, the whole-match possession count and the file's SHA-256 (the public window's
-score only with --report-public, as a report: it decides nothing), so a re-run can be compared byte for byte.
+The CSV goes to fresh/out/ by default, which a local .gitignore keeps untracked. With the tracked
+settings that file is fresh-A-setp-dur-cor-gbm.csv. Prints the official validator's verdict, the
+whole-match possession count and the file's SHA-256 (the public window's score only with
+--report-public, as a report: it decides nothing), so a re-run can be compared byte for byte.
 """
 
 import argparse
@@ -24,9 +25,11 @@ from possession.submission import validate, write_submission
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--variant", default=pipeline.FINAL, choices=pipeline.VARIANTS)
+    parser.add_argument("--variant", default=pipeline.FINAL, choices=pipeline.VARIANTS,
+                        help="pipeline to run (default: %(default)s, the submission)")
     parser.add_argument("--refit", action="store_true", help="learn the artifacts again")
-    parser.add_argument("--out", type=Path, help="CSV path (default fresh/out/fresh-<variant>.csv)")
+    parser.add_argument("--out", type=Path,
+                        help="CSV path (default fresh/out/fresh-<variant>-setp-dur-cor-gbm.csv)")
     parser.add_argument("--report-public", action="store_true",
                         help="also print the public window's score: a report only, never a choice")
     args = parser.parse_args()

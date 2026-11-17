@@ -2,11 +2,11 @@
 
 Team **Rey de Copas** (Mateo Toniolo, Gabriel Canavesio, Santiago Vidoz).
 
-This repository labels every frame of the competition match as home possession, away possession, or dead ball. A gradient-boosted tree, trained on public DFL tracking, is adapted to the match by expectation-maximisation. A duration-aware decoder then turns that evidence into whole possessions, and a second stage trained on DFL can hand a segment it judges wrong to its neighbour.
+The submission is variant A. A gradient-boosted tree is trained only on the seven external DFL matches, after a fixed degradation (version 4): 25-frame smoothing, 5 cm jitter, the ball hidden on half of frames, and log-normal gaps with an 8 s median. A duration-aware Viterbi decoder turns that evidence into possessions, and a segment corrector trained on DFL can hand a segment it judges wrong to its neighbour. There is no expectation-maximisation and no adaptation of tables to the provided match.
 
-The default artifact applies expectation-maximisation tables that were fit on BAR-ATH's unlabelled tracking and homography. That fit does not use ground truth, the public window, hand labels, or video.
+Variant A's decoder parameters were searched on DFL evidence under the version-1 degradation, whose constants were set from summary statistics of the provided tracking; the tree itself uses the fixed version-4 degradation.
 
-`uv run python fresh/predict.py --variant A` is the conservative alternative. It does not fit any parameter on the provided match. Its tree is trained on the seven DFL matches after a fixed degradation (version 4): 25-frame smoothing, 5 cm jitter, the ball hidden on half of frames, and log-normal gaps with an 8 s median. Those constants are round values for 25 Hz optical tracking, not estimates from this match. The command writes `fresh/out/fresh-A-setp-dur-cor-gbm.csv`. Add `--refit` to learn that file again from the DFL matches and the tracked decoder search.
+`uv run python fresh/predict.py --variant B` is an alternative and is not submitted. It uses expectation-maximisation tables fit on BAR-ATH's unlabelled tracking and homography. That fit does not use ground truth, the public window, hand labels, or video. It writes `fresh/out/fresh-B-setp-dur-cor-gbm.csv`. The SHA-256 of that earlier file, which is not the submission, is `0fa36ddbb2707f2c032a67cb742ab7dcb2dda427bfb3ec251f4f6146f9f16999`.
 
 The match data is not in this repository. It is never sent to a hosted AI service.
 
@@ -30,10 +30,10 @@ uv run python fresh/predict.py
 uv run python fresh/predict.py --refit
 ```
 
-Both commands write `fresh/out/fresh-B-setp-dur-cor-gbm.csv`. Expected SHA-256:
+Both commands write `fresh/out/fresh-A-setp-dur-cor-gbm.csv`. Expected SHA-256:
 
 ```
-0fa36ddbb2707f2c032a67cb742ab7dcb2dda427bfb3ec251f4f6146f9f16999
+112082e9a30598bf261966db8337b71a806a0fb3848bcdbce94f74395ebb4e06
 ```
 
 `--refit` learns the saved model again from the external matches and the tracked decoder search, then writes the same file. `fresh/out/` is gitignored.
@@ -41,13 +41,12 @@ Both commands write `fresh/out/fresh-B-setp-dur-cor-gbm.csv`. Expected SHA-256:
 Check the CSV with the pinned official validator:
 
 ```bash
-python vendor/mtah-2027/evaluation/validate_submission.py fresh/out/fresh-B-setp-dur-cor-gbm.csv
 python vendor/mtah-2027/evaluation/validate_submission.py fresh/out/fresh-A-setp-dur-cor-gbm.csv
 ```
 
 ## Compliance
 
-Training, tuning, and selection used external data only. No hand labels were used. The public five-minute window and the match video were not used for training, tuning, or selection.
+No hand labels were used. The public five-minute window and the match video were not used for training, tuning, or selection. Variant A does not run expectation-maximisation on the provided match. The decoder it loads was searched on DFL under the version-1 degradation described above.
 
 ## Layout
 

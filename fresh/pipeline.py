@@ -1,11 +1,12 @@
 """The fresh pipeline end to end: fit (label-free) and predict (deterministic).
 
 Variants, each adding one step to the previous:
-- A: logistic regression trained on the seven DFL matches (degraded, mirrored, no gap columns),
-  decoded with the median of the ten best decoders of a search on DFL's held-out evidence against
-  DFL's truth merged at config.MERGE seconds (chosen on DFL only); the ball dead before each kickoff.
-- B: A plus EM on the match: the ball's gaps and the broadcast cutting away, with tables learned
-  from the match's own unlabelled data (fresh/adapt.py).
+- A: the submission. The configured classifier (a gradient-boosted tree) trained on the seven
+  DFL matches under the fixed version-4 degradation (mirrored, no gap columns), decoded with the
+  median of the ten best decoders of a search on DFL's held-out evidence against DFL's truth
+  merged at config.MERGE seconds; the ball dead before each kickoff. No EM on the provided match.
+- B: not submitted. A plus EM on the match: the ball's gaps and the broadcast cutting away, with
+  tables learned from the match's own unlabelled data (fresh/adapt.py). Run it with --variant B.
 - C: B with the evidence half DFL model, half a model self-trained on the match, out of block
   (fresh/selftrain.py).
 
@@ -43,7 +44,7 @@ TOP = 10  # decoders whose median is used, or who vote
 MERGE = config.MERGE  # fresh/config.json merge_seconds, chosen on DFL only
 SEED_ENSEMBLE = (0, 10, 20)
 SELF_WEIGHT = 0.5  # C: share of the self-trained model in the evidence
-FINAL = "B"  # the submitted variant (fresh/README.md)
+FINAL = "A"  # the submitted variant (fresh/README.md). B remains available as --variant B.
 VARIANTS = ("A", "B", "C", "Ae", "Av", "Aev", "Be", "Bv", "Bev")
 
 
