@@ -1,4 +1,4 @@
-"""E4 features (docs/r2-rule.md E4): projected ball, visibility, control history.
+"""Projected ball, visibility, and control history.
 
 - pj_adv / pj_near: inside a ball gap, the ball projected on the straight line between its last
   and next seen positions, and the nearest-player advantage (away minus home distance, clipped

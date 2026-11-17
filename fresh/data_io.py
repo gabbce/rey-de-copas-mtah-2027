@@ -8,6 +8,7 @@ Match-derived caches live next to the match data (DATA_DIR/cache/fresh), never i
 public-data caches live in fresh/out/cache, which a local .gitignore keeps untracked.
 """
 
+import os
 from pathlib import Path
 
 import config
@@ -33,7 +34,9 @@ from possession.tracking import load_tracking
 
 FRESH = Path(__file__).resolve().parent
 OUT = FRESH / "out"
-PUBLIC_CACHE = OUT / ("cache" if config.DEGRADE == 1 else f"cache-v{config.DEGRADE}")
+_train_degrade = os.environ.get("FRESH_TRAIN_DEGRADE")
+PUBLIC_CACHE = OUT / (f"cache-v{_train_degrade}" if _train_degrade and _train_degrade != "1"
+                      else ("cache" if config.DEGRADE == 1 else f"cache-v{config.DEGRADE}"))
 ARTIFACTS = FRESH / "artifacts"  # tracked: the official decoder search, candidates and rankings only (no score)
 MATCH_CACHE = DATA_DIR / "cache" / "fresh" / GAME  # one directory per match: no stale features
 if config.SMOOTH > 1:  # E9-smooth changes the velocity features: never mix them with raw caches

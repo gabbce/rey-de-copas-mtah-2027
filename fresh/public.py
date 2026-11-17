@@ -11,7 +11,7 @@ Degradation, calibrated only on label-free aggregates of the match (fresh/stats.
 
 `merge_short` smooths DFL's possession flag: a spell shorter than T stays with the team that had
 the ball before it ("possession stays with the last team that had it", CHALLENGE.md). T is
-chosen on DFL alone, by the rule in docs/merge-threshold.md (config.json merge_seconds).
+chosen on DFL alone (`config.json` merge_seconds).
 """
 
 import data_io
@@ -27,8 +27,17 @@ HIDE_SHARE = 0.41
 GAP_MEDIAN = 10.7  # seconds
 GAP_SIGMA = 0.85  # log-normal sigma: median 10.7 s puts the 90th percentile near 32 s
 MIN_GAP = 1.0  # seconds
-# version 3 (docs/r2-rule.md E8): blur window (frames) and jitter (m) from run_inputs.py --fit
+# version 3: blur window (frames) and jitter (m), an alternate of version 1 not used by default
 V3_BLUR_JITTER = (21, 0.05)
+# Version 4 is the fixed degradation for the external-only variant. Round values for 25 Hz
+# optical tracking in general: one second of smoothing, a few centimetres of noise, the ball
+# missing about half the time, and gaps of several seconds. Not estimated from this match.
+V4_BLUR = 25  # frames
+V4_JITTER = 0.05  # metres
+V4_HIDE_SHARE = 0.5
+V4_GAP_MEDIAN = 8.0  # seconds
+V4_GAP_SIGMA = 1.0
+V4_MIN_GAP = 0.5  # seconds
 
 
 def blur_ball(ball, rng, window=BLUR, jitter=JITTER):
@@ -40,15 +49,16 @@ def blur_ball(ball, rng, window=BLUR, jitter=JITTER):
     return out.astype(np.float32)
 
 
-def hide_ball(ball, runs, rng, share=HIDE_SHARE):
+def hide_ball(ball, runs, rng, share=HIDE_SHARE, gap_median=GAP_MEDIAN, gap_sigma=GAP_SIGMA,
+              min_gap=MIN_GAP):
     """Long gaps placed at random inside each run until ~`share` of its frames are hidden."""
     out = ball.copy()
-    mean_gap = GAP_MEDIAN * np.exp(GAP_SIGMA ** 2 / 2) * FPS
+    mean_gap = gap_median * np.exp(gap_sigma ** 2 / 2) * FPS
     mean_shown = mean_gap * (1 - share) / share
     for start, stop in runs:
         t = start + int(rng.exponential(mean_shown))
         while t < stop:
-            gap = max(MIN_GAP, rng.lognormal(np.log(GAP_MEDIAN), GAP_SIGMA))
+            gap = max(min_gap, rng.lognormal(np.log(gap_median), gap_sigma))
             span = round(float(gap) * FPS)
             out[t:min(t + span, stop)] = np.nan
             t += span + max(1, int(rng.exponential(mean_shown)))
@@ -87,17 +97,32 @@ def test_suffix():
 
 
 def degrade(tracking, runs, seed, hide=True, truth=None, version=None):
-    """Version 1: blur, then state-free gaps. Version 2 (config.DEGRADE, docs/r2-rule.md E2): the
-    frozen stoppage ball replaced by a moving one, blur, then state-dependent gaps whose rates come
-    from the match's EM posteriors (gap_targets)."""
+    """Version 1: blur, then state-free gaps. Version 2 (config.DEGRADE): the frozen stoppage ball
+    replaced by a moving one, blur, then state-dependent gaps whose rates come from gap_targets.
+    Version 4: version 1's shape with the fixed V4 constants."""
+    import os
+
     import config
-    version = config.DEGRADE if version is None else version
+    forced = os.environ.get("FRESH_TRAIN_DEGRADE")
+    if version is None and forced:
+        version = int(forced)
+    else:
+        version = config.DEGRADE if version is None else version
     rng = np.random.default_rng(seed)
-    if version in (1, 3):
-        window, jitter = (BLUR, JITTER) if version == 1 else V3_BLUR_JITTER
+    if version in (1, 3, 4):
+        if version == 4:
+            window, jitter = V4_BLUR, V4_JITTER
+        elif version == 3:
+            window, jitter = V3_BLUR_JITTER
+        else:
+            window, jitter = BLUR, JITTER
         ball = blur_ball(tracking.ball, rng, window, jitter)
         if hide:
-            ball = hide_ball(ball, runs, rng)
+            if version == 4:
+                ball = hide_ball(ball, runs, rng, V4_HIDE_SHARE, V4_GAP_MEDIAN, V4_GAP_SIGMA,
+                                 V4_MIN_GAP)
+            else:
+                ball = hide_ball(ball, runs, rng)
         return Tracking(ball, tracking.players, tracking.team)
     if truth is None:
         raise ValueError("degradation 2 needs the DFL truth")

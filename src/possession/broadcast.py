@@ -2,8 +2,8 @@
 
 The broadcast cuts away from the pitch -- replays, close-ups, the bench -- mostly while the ball is
 dead. Its homography file already says, frame by frame, whether the picture shows the pitch
-(`valid`), so no video needs decoding. On our labelled windows the broadcast shows the pitch on
-94% of live frames and 32% of dead ones (docs/history.md).
+(`valid`), so no video needs decoding. The homography is an automatic record of
+whether the picture shows the pitch.
 
 DATA.md gives no mapping between the two recordings, but within each half the broadcast is the
 tactical video shifted by a constant number of frames. `align` finds that shift from the two ball

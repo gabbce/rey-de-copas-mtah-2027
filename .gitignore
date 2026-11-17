@@ -9,7 +9,7 @@ wheels/
 # Virtual environments
 .venv
 
-# Match data: licensed for the competition only, never committed
+# provided competition data (never committed)
 data/
 
 # Tool caches
@@ -20,7 +20,7 @@ data/
 fresh/out/
 data_fake/
 
-# Hand labels: an extract of the match, never committed
+# provided competition data (never committed)
 labels/
 
 # Public third-party data (Metrica sample games): downloaded locally, never committed

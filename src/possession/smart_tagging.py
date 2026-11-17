@@ -7,10 +7,8 @@ tag only adds a little evidence per frame, and the tracking still decides where 
 
 - Attacking phases say the tagged team has the ball; defending phases say the other one does.
 - A set piece is a restart: dead ball just before it, the tagged team just after it. Throw-ins are
-  tagged N/A, so after those only the tracking speaks. The interval is long (median 35 s) and
-  starts in the dead ball, with the tagged side first on the ball a few seconds after its start;
-  moving the team evidence there did not score better than leaving it after the end
-  (docs/history.md §33).
+  tagged N/A, so after those only the tracking speaks. The interval is long and starts before
+  the restart; the tagged side is treated as on the ball after the interval ends.
 - A first-half or second-half kickoff means everything graded before it is dead ball.
 """
 

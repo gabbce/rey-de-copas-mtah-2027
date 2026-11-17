@@ -230,7 +230,7 @@ def dfl_set(seed=0):
 
 
 def sample_set(seed=0):
-    """E7 (docs/r2-rule.md): Metrica's sample games 1-3 as extra training matches. Their own ball
+    """Metrica's sample games 1-3 as extra training matches. Their own ball
     blanks (out of play) are filled on the straight line first, then the DFL degradation of the
     run (state-free gaps) is applied, so a gap says nothing about the state. Cached."""
     import ctrl
@@ -299,7 +299,7 @@ def _window_rows(items, columns, mirror, subsample=SUBSAMPLE):
 
 
 def train(items, columns=None, l2=1.0, mirror=True):
-    if CLASSIFIER == "ens3":  # E5 (docs/r2-rule.md): gbm, net and logistic, log-likelihoods averaged
+    if CLASSIFIER == "ens3":  # gbm, net and logistic, log-likelihoods averaged
         import classifiers
         x, y = training_rows(items, columns, mirror)
         return Averaged([classifiers.fit_gbm(x, y),

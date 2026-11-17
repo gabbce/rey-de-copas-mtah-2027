@@ -1,4 +1,4 @@
-"""E9 features (docs/r2-rule.md E9): set-piece geometry, from the players only.
+"""Set-piece geometry, from the players only.
 
 A restart is set up before it is taken, and the set-up has a shape the players make whatever happens
 to the ball: the throw-in taker beyond a touchline, the corner taker at a flag with the box crowded,

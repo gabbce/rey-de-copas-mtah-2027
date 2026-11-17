@@ -2,7 +2,11 @@
 
 Team **Rey de Copas** (Mateo Toniolo, Gabriel Canavesio, Santiago Vidoz).
 
-This repository labels every frame of the competition match as home possession, away possession, or dead ball. A gradient-boosted tree, trained on public DFL tracking that has been degraded to resemble the competition feed, is adapted to the match by expectation-maximisation on the match's own unlabelled tracking. A duration-aware decoder then turns that evidence into whole possessions, and a second stage trained on DFL can hand a segment it judges wrong to its neighbour.
+This repository labels every frame of the competition match as home possession, away possession, or dead ball. A gradient-boosted tree, trained on public DFL tracking, is adapted to the match by expectation-maximisation. A duration-aware decoder then turns that evidence into whole possessions, and a second stage trained on DFL can hand a segment it judges wrong to its neighbour.
+
+The default artifact applies expectation-maximisation tables that were fit on BAR-ATH's unlabelled tracking and homography. That fit does not use ground truth, the public window, hand labels, or video.
+
+`uv run python fresh/predict.py --variant A` is the conservative alternative. It does not fit any parameter on the provided match. Its tree is trained on the seven DFL matches after a fixed degradation (version 4): 25-frame smoothing, 5 cm jitter, the ball hidden on half of frames, and log-normal gaps with an 8 s median. Those constants are round values for 25 Hz optical tracking, not estimates from this match. The command writes `fresh/out/fresh-A-setp-dur-cor-gbm.csv`. Add `--refit` to learn that file again from the DFL matches and the tracked decoder search.
 
 The match data is not in this repository. It is never sent to a hosted AI service.
 
@@ -21,7 +25,7 @@ The DFL matches are Bassek et al., *An integrated dataset of spatiotemporal and 
 ```bash
 git clone --recursive https://github.com/mateotoniolo/rey-de-copas-mtah-2027
 cd rey-de-copas-mtah-2027
-uv sync
+uv sync --locked
 uv run python fresh/predict.py
 uv run python fresh/predict.py --refit
 ```
@@ -38,6 +42,7 @@ Check the CSV with the pinned official validator:
 
 ```bash
 python vendor/mtah-2027/evaluation/validate_submission.py fresh/out/fresh-B-setp-dur-cor-gbm.csv
+python vendor/mtah-2027/evaluation/validate_submission.py fresh/out/fresh-A-setp-dur-cor-gbm.csv
 ```
 
 ## Compliance

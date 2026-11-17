@@ -47,15 +47,15 @@ FEATURE_SETS = {
     "shape": [n for n in bench.feats.NAMES if not n.startswith("gap_len")
               and n not in ("gap_since", "gap_until", "seen_near")] + list(longctx.NAMES)
     + list(bench.BEND_NAMES) + list(bench.shape.NAMES),
-    # E4 (docs/r2-rule.md): bend plus projected ball, visibility and control history (fresh/ctrl.py)
+    # bend plus projected ball, visibility and control history (fresh/ctrl.py)
     "ctrl": [n for n in bench.feats.NAMES if not n.startswith("gap_len")
              and n not in ("gap_since", "gap_until", "seen_near")] + list(longctx.NAMES)
     + list(bench.BEND_NAMES) + list(bench.ctrl.NAMES),
-    # E9 (docs/r2-rule.md): bend plus the set-piece geometry of the players (fresh/setpiece.py)
+    # bend plus the set-piece geometry of the players (fresh/setpiece.py)
     "setp": [n for n in bench.feats.NAMES if not n.startswith("gap_len")
              and n not in ("gap_since", "gap_until", "seen_near")] + list(longctx.NAMES)
     + list(bench.BEND_NAMES) + list(bench.setpiece.NAMES),
-    # E6 (docs/r2-rule.md): the same columns, the evidence restacked by run_stack.py
+    # the same columns, the evidence restacked by run_stack.py
     "bendst": [n for n in bench.feats.NAMES if not n.startswith("gap_len")
                and n not in ("gap_since", "gap_until", "seen_near")] + list(longctx.NAMES)
     + list(bench.BEND_NAMES),
