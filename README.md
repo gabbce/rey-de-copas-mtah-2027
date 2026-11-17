@@ -55,7 +55,7 @@ uv run python vendor/mtah-2027/evaluation/validate_submission.py fresh/out/fresh
 
 ## Compliance
 
-The submitted pipeline uses no hand labels or other human-produced labels of the provided match. The public five-minute window serves as a pipeline check. Variant A uses no expectation-maximisation on the provided match. Its classifier, decoder search, duration prior and corrector are derived from external DFL matches using the procedure above.
+The submitted pipeline uses no hand labels or other human-produced labels of the provided match. The public five-minute window and the match video were not used for training, tuning, or selection. Variant A uses no expectation-maximisation on the provided match. Its classifier, decoder search, duration prior and corrector are derived from external DFL matches using the procedure above.
 
 ## Layout
 
